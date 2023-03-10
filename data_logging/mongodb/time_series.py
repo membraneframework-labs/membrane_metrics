@@ -36,6 +36,3 @@ class MongoTimeSeries:
             data_points.append(data_point)
 
         return data_points
-
-    def get_all_data_points_timestamps(self) -> list[datetime]:
-        return [entry.date for entry in self.values]

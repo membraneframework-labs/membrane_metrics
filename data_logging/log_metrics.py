@@ -3,7 +3,8 @@ from data_logging.mongodb.mongo import MongoDB
 
 
 class LogMetrics:
-    def log(self, context: Context, db: MongoDB) -> None:
+    @staticmethod
+    def log(context: Context, db: MongoDB) -> None:
         """
         Logs metrics into database.
         """

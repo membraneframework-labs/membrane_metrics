@@ -1,12 +1,11 @@
 from context.context import Context
-from data_logging.discord.discord import LogDiscordMetrics
-from data_logging.mongodb.mongo import MongoDB
+from data_logging.metrics.discord.discord_metrics import DiscordMetrics
 
 
 def main():
     context = Context()
-    db = MongoDB(context)
-    LogDiscordMetrics.log(context, db)
+    discord_metrics = DiscordMetrics(context)
+    # db = MongoDB(context)
 
 
 if __name__ == '__main__':

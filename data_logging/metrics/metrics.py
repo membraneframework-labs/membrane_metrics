@@ -1,7 +1,7 @@
 from datetime import date, datetime
 
 from context.context import Context
-from data_logging.mongodb.mongo import MongoTimeSeries
+from data_logging.mongodb.mongo import TimeSeries
 
 
 class Metrics:
@@ -11,12 +11,8 @@ class Metrics:
         """
         pass
 
-    def get_metric_series(self) -> list[MongoTimeSeries]:
+    def get_metric_series(self) -> list[TimeSeries]:
         """
-        Returns dict with metrics names as keys and 
-        list of DataPoints representing metric value in different timestamps
+        Returns metrics in TimeSeries format
         """
-
-    @staticmethod
-    def date_to_datetime(day: date) -> datetime:
-        return datetime.combine(day, datetime.min.time())
+    

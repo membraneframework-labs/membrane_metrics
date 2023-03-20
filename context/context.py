@@ -1,5 +1,6 @@
 import tomli
 from context.discord_context import DiscordContext
+from context.twitter_context import TwitterContext
 from datetime import date
 from dataclasses import dataclass
 
@@ -10,6 +11,7 @@ class Context:
     end_date: date
     mongodb_connection_url = str
     discord_context: DiscordContext
+    twitter_context: TwitterContext
 
     def __init__(self):
         with open('config.toml', "rb") as file:
@@ -18,6 +20,7 @@ class Context:
         self.end_date = date.today()
         self.mongodb_connection_url = Context.get_mongodb_connection_url(config)
         self.discord_context = Context.get_discord_context(config)
+        self.twitter_context = Context.get_twitter_context(config)
 
     def __str__(self) -> str:
         return f'Context(\'{self.start_date}\', {self.discord_context})'
@@ -35,3 +38,8 @@ class Context:
         discord_token = config['discord']['bot_token']
         discord_guild_id = config['discord']['guild_id']
         return DiscordContext(discord_token, discord_guild_id)
+
+    @staticmethod
+    def get_discord_context(config: dict) -> TwitterContext:
+        bearer_token = config['twitter']['bearer_token']
+        return TwitterContext(bearer_token)

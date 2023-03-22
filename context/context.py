@@ -14,7 +14,7 @@ class Context:
     twitter_context: TwitterContext
 
     def __init__(self):
-        with open('config.toml', "rb") as file:
+        with open("config.toml", "rb") as file:
             config = tomli.load(file)
         self.start_date = Context.get_start_date(config)
         self.end_date = date.today()
@@ -23,23 +23,23 @@ class Context:
         self.twitter_context = Context.get_twitter_context(config)
 
     def __str__(self) -> str:
-        return f'Context(\'{self.start_date}\', {self.discord_context})'
+        return f"Context('{self.start_date}', {self.discord_context})"
 
     @staticmethod
     def get_start_date(config: dict) -> date:
-        return date.fromisoformat(config['general']['start_date'])
+        return date.fromisoformat(config["general"]["start_date"])
 
     @staticmethod
     def get_mongodb_connection_url(config: dict) -> str:
-        return config['mongodb']['url']
+        return config["mongodb"]["url"]
 
     @staticmethod
     def get_discord_context(config: dict) -> DiscordContext:
-        discord_token = config['discord']['bot_token']
-        discord_guild_id = config['discord']['guild_id']
+        discord_token = config["discord"]["bot_token"]
+        discord_guild_id = config["discord"]["guild_id"]
         return DiscordContext(discord_token, discord_guild_id)
 
     @staticmethod
-    def get_discord_context(config: dict) -> TwitterContext:
-        bearer_token = config['twitter']['bearer_token']
+    def get_twitter_context(config: dict) -> TwitterContext:
+        bearer_token = config["twitter"]["bearer_token"]
         return TwitterContext(bearer_token)

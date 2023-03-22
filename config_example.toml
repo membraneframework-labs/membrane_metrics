@@ -7,3 +7,6 @@ url = "mongodb+srv://USERNAME:PASSWORD@CLUSTER_URL/?retryWrites=true&w=majority"
 [discord]
 bot_token = "420692137@JPII.abc"
 guild_id = "464786597288738816"
+
+[twitter]
+bearer_token = "<BEARER TOKEN>"

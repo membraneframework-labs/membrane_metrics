@@ -12,7 +12,6 @@ T = TypeVar("T")
 class TwitterMetrics(Metrics):
     username: str = "ElixirMembrane"
     how_many_tweets_to_consider: int = 1000
-    how_many_days_back: int = 10
 
     def __init__(self, context: Context):
         self.bearer_token = context.twitter_context.bearer_token
@@ -31,12 +30,10 @@ class TwitterMetrics(Metrics):
             self.user_id, self.bearer_token, TwitterMetrics.how_many_tweets_to_consider
         )
         chunked_tweet_ids = _chunk_list(tweet_ids, 250)
-        start_datetime = date.today()
-        end_datetime = date.today() - timedelta(days=TwitterMetrics.how_many_days_back)
         results = {}
         for tweet_ids_chunk in chunked_tweet_ids:
             cumulative_reactions_number = TwitterAPI.get_engagements_per_day(
-                tweet_ids_chunk, self.bearer_token, start_datetime, end_datetime
+                tweet_ids_chunk, self.bearer_token, self.context.start_datetime, self.context.end_datetime
             )
             for day in cumulative_reactions_number.keys():
                 for hour in cumulative_reactions_number[day].keys():

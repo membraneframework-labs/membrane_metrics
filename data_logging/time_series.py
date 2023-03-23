@@ -30,10 +30,6 @@ class TimeSeries:
     collection: MongoCollection
     values: list[TimeSeriesEntry]
 
-    def __init__(self, collection_name: MongoCollection, values: list[TimeSeriesEntry]) -> None:
-        self.collection = collection_name
-        self.values = values
-
     def to_mongo_format(self) -> list[dict]:
         data_points = []
         for entry in self.values:

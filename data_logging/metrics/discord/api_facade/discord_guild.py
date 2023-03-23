@@ -27,9 +27,16 @@ class DiscordGuild:
         members_joins = self.members['joined_at']
         members_joins = members_joins.apply(lambda timestamp: parser.parse(timestamp).date())
 
-        members_stats = self.__count_series_entries_at_day(members_joins, start_date, end_date)
+        members_previous_day = len(members_joins[members_joins <= start_date])
+        new_joins = Counter(members_joins)
+        
+        members_at_days = []
+        for day in daterange(start_date, end_date):
+            members_at_day = members_previous_day + new_joins[day]
+            members_at_days.append((day, members_at_day))
+            members_previous_day = members_at_day
             
-        return [TimeSeriesEntry(day, members_at_day) for day, members_at_day in members_stats]
+        return [TimeSeriesEntry(day, members_at_day) for day, members_at_day in members_at_days]
     
     def get_messages_per_channel_per_day(self, start_date: date, end_date: date) -> list[TimeSeriesEntry]:
         time_series_entries = []
@@ -39,21 +46,9 @@ class DiscordGuild:
             except KeyError:
                 continue
             messages_series = messages_series.apply(lambda timestamp: parser.parse(timestamp).date())
-            messages_stats = self.__count_series_entries_at_day(messages_series, start_date, end_date)
+            messages_stats = Counter(messages_series)
             time_series_entries += \
-                [TimeSeriesEntry(day, message_count, channel_name) for day, message_count in messages_stats]
+                [TimeSeriesEntry(day, messages_stats[day], channel_name) for day in daterange(start_date, end_date)]
         
         return time_series_entries
     
-    @staticmethod
-    def __count_series_entries_at_day(series: Series[date], start_date: date, end_date: date) -> list[tuple[date, int]]:
-        entries_at_previous_day = len(series[series <= start_date])
-        new_entries_on_days = Counter(series)
-        
-        entries_at_days = []
-        for day in daterange(start_date, end_date):
-            entries_at_day = entries_at_previous_day + new_entries_on_days[date]
-            entries_at_days.append((day, entries_at_day))
-            entries_at_previous_day = entries_at_day
-        
-        return entries_at_days

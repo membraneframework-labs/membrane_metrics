@@ -3,8 +3,10 @@ from pymongo.database import Database
 
 from context.context import Context
 from data_logging.time_series import TimeSeries
+from dataclasses import dataclass
 
 
+@dataclass
 class MongoDB:
     client: MongoClient
     db: Database
@@ -16,8 +18,8 @@ class MongoDB:
 
     def write_time_series(self, time_series: TimeSeries) -> None:
         collection = self.db[time_series.collection.name]
-        collection_time_stamps = set(
-            [document['date'] for document in collection.find({})])
+        collection_time_stamps = {
+            document['date'] for document in collection.find({})}
         filtered_time_series = TimeSeries(
             time_series.collection,
             list(filter(

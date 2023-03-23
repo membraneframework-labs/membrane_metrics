@@ -1,5 +1,5 @@
 import tomli
-from context.discord_context import DiscordContext
+from context.discord_context import DiscordContext, BotToken, UserToken, GuildID
 from datetime import date
 from dataclasses import dataclass
 
@@ -32,6 +32,7 @@ class Context:
 
     @staticmethod
     def get_discord_context(config: dict) -> DiscordContext:
-        discord_token = config['discord']['bot_token']
-        discord_guild_id = config['discord']['guild_id']
-        return DiscordContext(discord_token, discord_guild_id)
+        bot_token = BotToken(config['discord']['bot_token'])
+        user_token = UserToken(config['discord']['user_token'])
+        guild_id = GuildID(config['discord']['guild_id'])
+        return DiscordContext(bot_token, user_token, guild_id)

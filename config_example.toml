@@ -5,5 +5,6 @@ start_date = "2023-02-01"
 url = "mongodb+srv://USERNAME:PASSWORD@CLUSTER_URL/?retryWrites=true&w=majority"
 
 [discord]
-bot_token = "420692137@JPII.abc"
+bot_token = "YOUR_BOT_TOKEN"
+user_token = "YOUR_USER_TOKEN"
 guild_id = "464786597288738816"

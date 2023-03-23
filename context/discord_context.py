@@ -1,16 +1,13 @@
 from typing import NewType
+from dataclasses import dataclass
 
 BotToken = NewType('BotToken', str)
+UserToken = NewType('UserToken', str)
 GuildID = NewType('GuildID', str)
 
-
+@dataclass
 class DiscordContext:
     bot_token: BotToken
+    user_token: UserToken
     guild_id: GuildID
 
-    def __init__(self, discord_token: str, discord_guild_id: str) -> None:
-        self.bot_token = discord_token
-        self.guild_id = discord_guild_id
-
-    def __str__(self) -> str:
-        return f'DiscordContext(\'{self.bot_token}\', \'{self.guild_id}\')'

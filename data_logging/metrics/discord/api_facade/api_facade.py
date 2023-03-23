@@ -4,6 +4,9 @@ import pandas as pd
 from context.discord_context import BotToken, GuildID
 from enum import Enum
 
+DISCORD_BASE_URL = 'https://discord.com/api/v10'
+MAX_MEMBERS_REQUEST_LIMIT = 1000
+
 class ChannelType(Enum):
     GUILD_TEXT = 0
     DM = 1
@@ -24,22 +27,25 @@ class ChannelType(Enum):
 
 
 def send_get_request(bot_token: BotToken, endpoint: str, params: dict = {}):
-    REQUEST_HEADER = {'Authorization': f'Bot {bot_token}'}
-    DISCORD_BASE_URL = 'https://discord.com/api/v10'
+    request_header = {'Authorization': f'Bot {bot_token}'}
+    
     response = requests.get(
-        DISCORD_BASE_URL + endpoint, headers=REQUEST_HEADER, params=params)
+        DISCORD_BASE_URL + endpoint, headers=request_header, params=params)
     response.raise_for_status()
     return response.json()
 
 def get_guild_members(bot_token: BotToken, guild_id: GuildID) -> pd.DataFrame:
-    MAX_REQUEST_LIMIT = 1000
-    params = {'limit': MAX_REQUEST_LIMIT}
+    params = {'limit': MAX_MEMBERS_REQUEST_LIMIT}
     guild_members_objects = send_get_request(
-        bot_token, f'/guilds/{guild_id}/members', params) 
+        bot_token, f'/guilds/{guild_id}/members', params)
+    
+    last_response_len = len(guild_members_objects)
 
-    while len(guild_members_objects) % MAX_REQUEST_LIMIT == 0:
-        params = {'limit': MAX_REQUEST_LIMIT, 'after': guild_members_objects[-1]['user']['id']}
-        guild_members_objects += send_get_request(bot_token, f'/guilds/{guild_id}/members', params)
+    while last_response_len == MAX_MEMBERS_REQUEST_LIMIT:
+        params = {'limit': MAX_MEMBERS_REQUEST_LIMIT, 'after': guild_members_objects[-1]['user']['id']}
+        members_chunk = send_get_request(bot_token, f'/guilds/{guild_id}/members', params)
+        last_response_len = len(members_chunk)
+        guild_members_objects += members_chunk
     
     return pd.json_normalize(guild_members_objects)
 

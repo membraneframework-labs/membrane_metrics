@@ -3,7 +3,7 @@ from enum import Enum
 import pandas as pd
 import requests
 
-from context.discord_context import BotToken, GuildID
+from config.discord_config import BotToken, GuildID
 
 DISCORD_BASE_URL = 'https://discord.com/api/v10'
 MAX_MEMBERS_REQUEST_LIMIT = 1000
@@ -97,7 +97,6 @@ def __get_guild_forum_messages(bot_token: BotToken, guild_id: GuildID, guild_for
 
     messages = []
     for thread in threads:
-        print(thread['name'])
         thread_id = thread['id']
         messages += send_get_request(bot_token,
                                      f'/channels/{thread_id}/messages')

@@ -1,15 +1,15 @@
-from context.context import Context
+from config.app_config import AppConfig
 from data_logging.metrics.discord.discord_metrics import DiscordMetrics
 from data_logging.mongodb.mongo import MongoDB
 
 
 def main():
-    context = Context()
+    config = AppConfig()
     # Metrics collection
-    discord_metrics = DiscordMetrics(context)
+    discord_metrics = DiscordMetrics(config)
 
     # Creating db connection
-    db = MongoDB(context)
+    db = MongoDB(config)
 
     # Logging metrics to db
     all_discord_series = discord_metrics.get_metric_series()

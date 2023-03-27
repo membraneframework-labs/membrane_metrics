@@ -6,6 +6,6 @@ GuildID = NewType('GuildID', str)
 
 
 @dataclass
-class DiscordContext:
+class DiscordConfig:
     bot_token: BotToken
     guild_id: GuildID

@@ -6,7 +6,7 @@ import dateutil.parser as parser
 import pandas as pd
 
 import data_logging.metrics.discord.api_facade.api_facade as discord_api_facade
-from context.discord_context import DiscordContext
+from config.discord_config import DiscordConfig
 from data_logging.time_series import TimeSeriesEntry
 
 
@@ -20,11 +20,11 @@ class DiscordGuild:
     members: pd.DataFrame
     channels_messages: dict[str, pd.DataFrame]
 
-    def __init__(self, discord_context: DiscordContext) -> None:
+    def __init__(self, discord_config: DiscordConfig) -> None:
         self.members = discord_api_facade.get_guild_members(
-            discord_context.bot_token, discord_context.guild_id)
+            discord_config.bot_token, discord_config.guild_id)
         self.channels_messages = discord_api_facade.get_guild_messages(
-            discord_context.bot_token, discord_context.guild_id)
+            discord_config.bot_token, discord_config.guild_id)
 
     def get_members_at_days(self, start_date: date, end_date: date) -> list[TimeSeriesEntry]:
         members_joins = self.members['joined_at']

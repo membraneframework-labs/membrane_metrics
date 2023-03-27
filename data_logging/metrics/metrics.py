@@ -1,12 +1,12 @@
 from abc import abstractmethod
 
-from context.context import Context
+from config.app_config import AppConfig
 from data_logging.mongodb.mongo import TimeSeries
 
 
 class Metrics:
     @abstractmethod
-    def __init__(self, context: Context) -> None:
+    def __init__(self, config: AppConfig) -> None:
         """
         Initialize / generate metrics.
         """

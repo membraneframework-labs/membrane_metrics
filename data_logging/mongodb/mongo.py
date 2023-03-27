@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from pymongo import MongoClient
 from pymongo.database import Database
 
-from context.context import Context
+from config.app_config import AppConfig
 from data_logging.time_series import TimeSeries
 
 
@@ -12,9 +12,9 @@ class MongoDB:
     client: MongoClient
     db: Database
 
-    def __init__(self, context: Context) -> None:
+    def __init__(self, config: AppConfig) -> None:
         database_name = 'Discord'
-        self.client = MongoClient(context.mongodb_connection_url)
+        self.client = MongoClient(config.mongodb_connection_url)
         self.db = self.client[database_name]
 
     def write_time_series(self, time_series: TimeSeries) -> None:

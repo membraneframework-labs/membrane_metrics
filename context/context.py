@@ -1,5 +1,5 @@
 import tomli
-from context.discord_context import DiscordContext, BotToken, UserToken, GuildID
+from context.discord_context import DiscordContext, BotToken, GuildID
 from datetime import date
 from dataclasses import dataclass
 
@@ -19,9 +19,6 @@ class Context:
         self.mongodb_connection_url = Context.get_mongodb_connection_url(config)
         self.discord_context = Context.get_discord_context(config)
 
-    def __str__(self) -> str:
-        return f'Context(\'{self.start_date}\', {self.discord_context})'
-
     @staticmethod
     def get_start_date(config: dict) -> date:
         return date.fromisoformat(config['general']['start_date'])
@@ -33,6 +30,5 @@ class Context:
     @staticmethod
     def get_discord_context(config: dict) -> DiscordContext:
         bot_token = BotToken(config['discord']['bot_token'])
-        user_token = UserToken(config['discord']['user_token'])
         guild_id = GuildID(config['discord']['guild_id'])
-        return DiscordContext(bot_token, user_token, guild_id)
+        return DiscordContext(bot_token, guild_id)

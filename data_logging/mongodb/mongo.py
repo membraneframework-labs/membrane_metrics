@@ -12,7 +12,7 @@ class MongoDB:
     db: Database
 
     def __init__(self, context: Context) -> None:
-        database_name = 'MembraneMetrics'
+        database_name = 'Discord'
         self.client = MongoClient(context.mongodb_connection_url)
         self.db = self.client[database_name]
 

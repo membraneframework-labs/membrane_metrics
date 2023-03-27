@@ -1,4 +1,5 @@
 from abc import abstractmethod
+
 from context.context import Context
 from data_logging.mongodb.mongo import TimeSeries
 

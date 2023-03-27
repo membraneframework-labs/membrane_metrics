@@ -1,10 +1,9 @@
-import requests
+from enum import Enum
+
 import pandas as pd
-import itertools
-import time
+import requests
 
 from context.discord_context import BotToken, GuildID
-from enum import Enum
 
 DISCORD_BASE_URL = 'https://discord.com/api/v10'
 MAX_MEMBERS_REQUEST_LIMIT = 1000
@@ -91,7 +90,7 @@ def __get_guild_forum_messages(bot_token: BotToken, guild_id: GuildID, guild_for
     all_active_threads = send_get_request(
         bot_token, f'/guilds/{guild_id}/threads/active')['threads']
     threads += list(filter(lambda thread: thread['parent_id']
-                    == guild_forum_channel_id, all_active_threads))
+                                          == guild_forum_channel_id, all_active_threads))
 
     threads += send_get_request(
         bot_token, f'/channels/{guild_forum_channel_id}/threads/archived/public')['threads']

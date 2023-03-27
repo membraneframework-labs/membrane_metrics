@@ -1,9 +1,10 @@
-from context.context import Context
-from data_logging.metrics.metrics import Metrics
-from data_logging.metrics.discord.api_facade.discord_guild import DiscordGuild
-from data_logging.time_series import TimeSeries, TimeSeriesEntry
-from data_logging.mongodb.collection import MongoCollection
 from dataclasses import dataclass
+
+from context.context import Context
+from data_logging.metrics.discord.api_facade.discord_guild import DiscordGuild
+from data_logging.metrics.metrics import Metrics
+from data_logging.mongodb.collection import MongoCollection
+from data_logging.time_series import TimeSeries, TimeSeriesEntry
 
 
 @dataclass

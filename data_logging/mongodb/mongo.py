@@ -1,9 +1,10 @@
+from dataclasses import dataclass
+
 from pymongo import MongoClient
 from pymongo.database import Database
 
 from context.context import Context
 from data_logging.time_series import TimeSeries
-from dataclasses import dataclass
 
 
 @dataclass

@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from datetime import datetime
 from datetime import date as datetime_date
+from datetime import datetime
 from typing import Optional
 
 from data_logging.mongodb.collection import MongoCollection
 
-def date_to_datetime(day: datetime_date) -> datetime:
-        return datetime.combine(day, datetime.min.time())
 
+def date_to_datetime(day: datetime_date) -> datetime:
+    return datetime.combine(day, datetime.min.time())
 
 
 @dataclass
@@ -37,7 +37,7 @@ class TimeSeries:
                           self.collection.get_value_field_name(): entry.value}
             if entry.meta_field_value is not None:
                 data_point[self.collection.get_meta_field_name()
-                           ] = entry.meta_field_value
+                ] = entry.meta_field_value
             data_points.append(data_point)
 
         return data_points

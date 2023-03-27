@@ -1,5 +1,6 @@
 [general]
 start_date = "2023-02-01"
+end_date = "2023-03-01"  # Optional, default value is the current date
 
 [mongodb]
 url = "mongodb+srv://USERNAME:PASSWORD@CLUSTER_URL/?retryWrites=true&w=majority"

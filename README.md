@@ -1,5 +1,5 @@
 # Membrane Metrics
-This repo contains the backend system for retrieving and logging into MongoDB some metrics related to Membrane Framework.
+This repo contains the backend system for retrieving and logging into MongoDB some community metrics related to Membrane Framework.
 
 ## Usage
 

@@ -79,7 +79,7 @@ def __get_channel_messages(bot_token: BotToken, guild_id: GuildID, channel_objec
     if channel_type == ChannelType.GUILD_FORUM:
         return pd.DataFrame.from_dict(__get_guild_forum_messages(bot_token, guild_id, channel_object['id']))
     elif channel_type.is_message_channel():
-        return pd.DataFrame.from_dict(__get_message_channel_messages(bot_token, channel_object['id']))
+        return pd.DataFrame.from_dict(_get_message_channel_messages(bot_token, channel_object['id']))
     else:
         return None
 
@@ -103,7 +103,7 @@ def __get_guild_forum_messages(bot_token: BotToken, guild_id: GuildID, guild_for
     return pd.DataFrame.from_dict(messages)
 
 
-def __get_message_channel_messages(bot_token: BotToken, channel_id: str) -> pd.DataFrame:
+def _get_message_channel_messages(bot_token: BotToken, channel_id: str) -> pd.DataFrame:
     channel_messages = send_get_request(
         bot_token, f'/channels/{channel_id}/messages')
     return pd.DataFrame.from_dict(channel_messages)

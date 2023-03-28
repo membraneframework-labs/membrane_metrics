@@ -17,3 +17,4 @@ class Metrics:
         """
         Returns metrics in TimeSeries format
         """
+        pass

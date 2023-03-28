@@ -10,12 +10,11 @@ from config.discord_config import DiscordConfig
 from data_logging.time_series import TimeSeriesEntry
 
 
-def daterange(start_date: date, end_date: date):
+def _daterange(start_date: date, end_date: date):
     for n in range(int((end_date - start_date).days)):
         yield start_date + timedelta(n)
 
 
-@dataclass
 class DiscordGuild:
     members: pd.DataFrame
     channels_messages: dict[str, pd.DataFrame]
@@ -35,7 +34,7 @@ class DiscordGuild:
         new_joins = Counter(members_joins)
 
         members_at_days = []
-        for day in daterange(start_date, end_date):
+        for day in _daterange(start_date, end_date):
             members_at_day = members_previous_day + new_joins[day]
             members_at_days.append((day, members_at_day))
             members_previous_day = members_at_day
@@ -45,15 +44,12 @@ class DiscordGuild:
     def get_messages_per_channel_per_day(self, start_date: date, end_date: date) -> list[TimeSeriesEntry]:
         time_series_entries = []
         for channel_name, messages in self.channels_messages.items():
-            try:
-                messages_series = messages['timestamp']
-            except KeyError:
-                continue
+            messages_series = messages['timestamp']
             messages_series = messages_series.apply(
                 lambda timestamp: parser.parse(timestamp).date())
             messages_stats = Counter(messages_series)
             time_series_entries += \
                 [TimeSeriesEntry(day, messages_stats[day], channel_name)
-                 for day in daterange(start_date, end_date)]
+                 for day in _daterange(start_date, end_date)]
 
         return time_series_entries

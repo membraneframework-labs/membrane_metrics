@@ -7,7 +7,6 @@ from config.app_config import AppConfig
 from data_logging.time_series import TimeSeries
 
 
-@dataclass
 class MongoDB:
     client: MongoClient
     db: Database

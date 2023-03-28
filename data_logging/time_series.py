@@ -6,7 +6,7 @@ from typing import Optional
 from data_logging.mongodb.collection import MongoCollection
 
 
-def date_to_datetime(day: datetime_date) -> datetime:
+def _date_to_datetime(day: datetime_date) -> datetime:
     return datetime.combine(day, datetime.min.time())
 
 
@@ -18,7 +18,7 @@ class TimeSeriesEntry:
 
     def __init__(self, date: datetime or datetime_date, value: float, meta_filed_value: Optional[str] = None):
         if isinstance(date, datetime_date):
-            self.date = date_to_datetime(date)
+            self.date = _date_to_datetime(date)
         else:
             self.date = date
         self.value = value

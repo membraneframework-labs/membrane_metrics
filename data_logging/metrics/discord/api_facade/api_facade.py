@@ -65,7 +65,7 @@ def get_guild_messages(bot_token: BotToken, guild_id: GuildID) -> dict[str, pd.D
 
     messages = {}
     for channel in guild_channels_objects:
-        match __get_channel_messages(bot_token, guild_id, channel):
+        match _get_channel_messages(bot_token, guild_id, channel):
             case None:
                 continue
             case channel_messages:
@@ -74,17 +74,17 @@ def get_guild_messages(bot_token: BotToken, guild_id: GuildID) -> dict[str, pd.D
     return messages
 
 
-def __get_channel_messages(bot_token: BotToken, guild_id: GuildID, channel_object: dict) -> pd.DataFrame or None:
+def _get_channel_messages(bot_token: BotToken, guild_id: GuildID, channel_object: dict) -> pd.DataFrame or None:
     channel_type = ChannelType(channel_object['type'])
     if channel_type == ChannelType.GUILD_FORUM:
-        return pd.DataFrame.from_dict(__get_guild_forum_messages(bot_token, guild_id, channel_object['id']))
+        return pd.DataFrame.from_dict(_get_guild_forum_messages(bot_token, guild_id, channel_object['id']))
     elif channel_type.is_message_channel():
         return pd.DataFrame.from_dict(_get_message_channel_messages(bot_token, channel_object['id']))
     else:
         return None
 
 
-def __get_guild_forum_messages(bot_token: BotToken, guild_id: GuildID, guild_forum_channel_id: str) -> pd.DataFrame:
+def _get_guild_forum_messages(bot_token: BotToken, guild_id: GuildID, guild_forum_channel_id: str) -> pd.DataFrame:
     threads = []
 
     all_active_threads = send_get_request(

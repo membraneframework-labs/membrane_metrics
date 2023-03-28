@@ -1,5 +1,4 @@
 from collections import Counter
-from dataclasses import dataclass
 from datetime import date, timedelta
 
 import dateutil.parser as parser

@@ -19,7 +19,7 @@ class MongoCollection(Enum):
     def get_meta_field_name(self) -> Optional[str]:
         match self:
             case MongoCollection.DiscordMembersAtDay:
-                return "channel"
+                return None
             case MongoCollection.DiscordMessagesPerDayPerChannel:
                 return "channel"
             case default:

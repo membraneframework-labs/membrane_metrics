@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Optional
 
 import pandas as pd
 import requests
@@ -74,7 +75,7 @@ def get_guild_messages(bot_token: BotToken, guild_id: GuildID) -> dict[str, pd.D
     return messages
 
 
-def _get_channel_messages(bot_token: BotToken, guild_id: GuildID, channel_object: dict) -> pd.DataFrame or None:
+def _get_channel_messages(bot_token: BotToken, guild_id: GuildID, channel_object: dict) -> Optional[pd.DataFrame]:
     channel_type = ChannelType(channel_object['type'])
     if channel_type == ChannelType.GUILD_FORUM:
         return pd.DataFrame.from_dict(_get_guild_forum_messages(bot_token, guild_id, channel_object['id']))

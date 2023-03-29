@@ -10,7 +10,6 @@ def _date_to_datetime(day: datetime_date) -> datetime:
     return datetime.combine(day, datetime.min.time())
 
 
-@dataclass
 class TimeSeriesEntry:
     date: datetime
     value: float
@@ -41,3 +40,4 @@ class TimeSeries:
             data_points.append(data_point)
 
         return data_points
+ 

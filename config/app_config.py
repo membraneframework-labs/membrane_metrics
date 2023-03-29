@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from datetime import date
 
 import tomli
@@ -6,7 +5,6 @@ import tomli
 from config.discord_config import DiscordConfig, BotToken, GuildID
 
 
-@dataclass
 class AppConfig:
     start_date: date
     end_date: date

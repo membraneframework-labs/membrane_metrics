@@ -1,5 +1,3 @@
-from dataclasses import dataclass
-
 from config.app_config import AppConfig
 from data_logging.metrics.discord.api_facade.discord_guild import DiscordGuild
 from data_logging.metrics.metrics import Metrics
@@ -7,7 +5,6 @@ from data_logging.mongodb.collection import MongoCollection
 from data_logging.time_series import TimeSeries, TimeSeriesEntry
 
 
-@dataclass
 class DiscordMetrics(Metrics):
     members_at_days: list[TimeSeriesEntry]
     messages_per_channel_per_day: list[TimeSeriesEntry]

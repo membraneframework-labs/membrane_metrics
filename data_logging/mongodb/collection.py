@@ -5,6 +5,7 @@ from typing import Optional
 class MongoCollection(Enum):
     DiscordMembersAtDay = "DiscordMembersAtDay"
     DiscordMessagesPerDayPerChannel = "DiscordMessagesPerDayPerChannel"
+    HexCumulativePackagesDownloads = "HexCumulativePackagesDownloads"
 
     def get_value_field_name(self) -> str:
         match self:
@@ -12,6 +13,8 @@ class MongoCollection(Enum):
                 return "members_at_day"
             case MongoCollection.DiscordMessagesPerDayPerChannel:
                 return "messages_per_day"
+            case MongoCollection.HexCumulativePackagesDownloads:
+                return "cumulative_hex_packages_downloads"
             case default:
                 raise NotImplementedError(
                     f'get_value_field_name is not implemented for {self} collection')

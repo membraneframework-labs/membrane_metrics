@@ -1,7 +1,7 @@
 from data_logging.metrics.metrics import Metrics
 from data_logging.time_series import TimeSeries, TimeSeriesEntry
 from config.app_config import AppConfig
-from data_logging.twitter.twitter_api import TwitterAPI
+from data_logging.metrics.twitter.api_facade.twitter_api import TwitterAPI
 from datetime import datetime, date, timedelta
 from data_logging.mongodb.collection import MongoCollection
 from typing import TypeVar

@@ -9,6 +9,8 @@ class MongoCollection(Enum):
         "TwitterCumulativeReactionsToRecentTweetsPerDay"
     )
     TwitterNumberOfFollowers = "TwitterNumberOfFollowers"
+    HexCumulativePackagesDownloads = "HexCumulativePackagesDownloads"
+    
 
     def get_value_field_name(self) -> str:
         match self:
@@ -20,6 +22,8 @@ class MongoCollection(Enum):
                 return "cumulative_reactions_to_recent_tweets_per_day"
             case MongoCollection.TwitterNumberOfFollowers:
                 return "number_of_twitter_followers"
+            case MongoCollection.HexCumulativePackagesDownloads:
+                return "cumulative_hex_packages_downloads"
             case default:
                 raise NotImplementedError(
                     f"get_value_field_name is not implemented for {self} collection"

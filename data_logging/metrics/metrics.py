@@ -1,18 +1,20 @@
-from datetime import date, datetime
+from abc import abstractmethod
 
-from context.context import Context
+from config.app_config import AppConfig
 from data_logging.mongodb.mongo import TimeSeries
 
 
 class Metrics:
-    def __init__(self, context: Context) -> None:
+    @abstractmethod
+    def __init__(self, config: AppConfig) -> None:
         """
         Initialize / generate metrics.
         """
         pass
 
+    @abstractmethod
     def get_metric_series(self) -> list[TimeSeries]:
         """
         Returns metrics in TimeSeries format
         """
-    
+        pass

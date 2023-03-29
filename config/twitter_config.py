@@ -6,5 +6,5 @@ TwitterBearerToken = NewType("TwitterBearerToken", str)
 
 
 @dataclass
-class TwitterContext:
+class TwitterConfig:
     bearer_token: TwitterBearerToken

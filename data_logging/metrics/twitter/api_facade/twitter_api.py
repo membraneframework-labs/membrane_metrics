@@ -1,5 +1,5 @@
 import requests
-from context.twitter_context import TwitterBearerToken
+from config.twitter_config import TwitterBearerToken
 from typing import NewType
 from datetime import date
 
@@ -33,15 +33,15 @@ class TwitterAPI:
     def get_engagements_per_day(
         tweet_ids: list[TweetId],
         bearer_token: TwitterBearerToken,
-        start_datetime: date,
-        end_datetime: date,
+        start_date: date,
+        end_date: date,
     ) -> dict:
         if len(tweet_ids) > 250:
             raise Exception("Cannot send a request for more than 250 tweet IDs")
         endpoint = TwitterAPI.twitter_engagement_api_base_url + "/totals"
         body = {
-            "start": start_datetime.strftime("%Y-%m-%d"),
-            "end": end_datetime.strftime("%Y-%m-%d"),
+            "start": start_date.strftime("%Y-%m-%d"),
+            "end": end_date.strftime("%Y-%m-%d"),
             "tweet_ids": tweet_ids,
             "engagement_types": [
                 "impressions",

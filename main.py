@@ -21,5 +21,5 @@ def main():
         db.write_time_series(single_series)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

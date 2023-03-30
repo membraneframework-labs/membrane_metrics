@@ -4,12 +4,13 @@ from data_logging.metrics.twitter.twitter_metrics import TwitterMetrics
 from data_logging.metrics.hex.hex_metrics import HexMetrics
 from data_logging.mongodb.mongo import MongoDB
 
+
 def main():
     config = AppConfig()
     # Metrics collection
     metrics = [
-        #DiscordMetrics(config),
-        #TwitterMetrics(config),
+        DiscordMetrics(config),
+        TwitterMetrics(config),
         HexMetrics(config)
     ]
     # Creating db connection
@@ -22,5 +23,5 @@ def main():
             db.write_time_series(single_seriee)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

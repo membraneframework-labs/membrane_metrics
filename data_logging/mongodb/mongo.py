@@ -4,15 +4,12 @@ from pymongo.database import Database
 from config.app_config import AppConfig
 from data_logging.time_series import TimeSeries
 
+DATABASE_NAME = 'Discord'
 
 class MongoDB:
-    client: MongoClient
-    db: Database
-
     def __init__(self, config: AppConfig) -> None:
-        database_name = 'Discord'
-        self.client = MongoClient(config.mongodb_connection_url)
-        self.db = self.client[database_name]
+        self.client: MongoClient = MongoClient(config.mongodb_connection_url)
+        self.db: Database = self.client[DATABASE_NAME]
 
     def write_time_series(self, time_series: TimeSeries) -> None:
         db_collection = self.db[time_series.collection.name]

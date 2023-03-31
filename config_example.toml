@@ -8,3 +8,6 @@ url = "mongodb+srv://USERNAME:PASSWORD@CLUSTER_URL/?retryWrites=true&w=majority"
 [discord]
 bot_token = "YOUR_BOT_TOKEN"
 guild_id = "464786597288738816"
+
+[google]
+secrets_file_path = "PATH TO THE .json FILE WITH CLIENT SECRETS"

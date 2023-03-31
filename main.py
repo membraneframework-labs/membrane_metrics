@@ -4,13 +4,14 @@ from config.app_config import AppConfig
 from data_logging.metrics.discord.discord_metrics import DiscordMetrics
 from data_logging.metrics.metrics import Metrics
 from data_logging.metrics.hex.hex_metrics import HexMetrics
+from data_logging.metrics.google.google_metrics import GoogleMetrics
 from data_logging.mongodb.mongo import MongoDB
 
 
 def main():
     config = AppConfig()
     # Metrics collection
-    source_metrics: list[Metrics] = [DiscordMetrics(config), HexMetrics(config)]
+    source_metrics: list[Metrics] = [DiscordMetrics(config), HexMetrics(config), GoogleMetrics(config)]
 
     # Creating db connection
     db = MongoDB(config)

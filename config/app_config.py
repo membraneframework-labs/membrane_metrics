@@ -3,7 +3,7 @@ from datetime import date
 import tomli
 from config.discord_config import DiscordConfig, BotToken, GuildID
 from config.twitter_config import TwitterConfig
-
+from config.google_config import GoogleConfig
 
 @dataclass
 class AppConfig:
@@ -12,6 +12,7 @@ class AppConfig:
     mongodb_connection_url = str
     discord_config: DiscordConfig
     twitter_config: TwitterConfig
+    google_config: GoogleConfig
 
     def __init__(self):
         with open("config.toml", "rb") as file:
@@ -21,6 +22,7 @@ class AppConfig:
         self.mongodb_connection_url = config["mongodb"]["url"]
         self.discord_config = AppConfig.get_discord_config(config)
         self.twitter_config = AppConfig.get_twitter_config(config)
+        self.google_config = AppConfig.get_google_config(config)
 
     @staticmethod
     def get_discord_config(config: dict) -> DiscordConfig:
@@ -32,6 +34,11 @@ class AppConfig:
     def get_twitter_config(config: dict) -> TwitterConfig:
         bearer_token = config["twitter"]["bearer_token"]
         return TwitterConfig(bearer_token)
+    
+    @staticmethod
+    def get_google_config(config: dict) -> GoogleConfig:
+        path_to_secrets_file = config["google"]["secrets_file_path"]
+        return GoogleConfig(path_to_secrets_file)
 
     @staticmethod
     def get_end_date(config: dict) -> date:

@@ -11,3 +11,6 @@ guild_id = "464786597288738816"
 
 [twitter]
 bearer_token = "BEARER_TOKEN"
+
+[google]
+secrets_file_path = "PATH TO THE .json FILE WITH CLIENT SECRETS"

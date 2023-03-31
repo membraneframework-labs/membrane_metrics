@@ -2,6 +2,7 @@ from config.app_config import AppConfig
 from data_logging.metrics.discord.discord_metrics import DiscordMetrics
 from data_logging.metrics.twitter.twitter_metrics import TwitterMetrics
 from data_logging.metrics.hex.hex_metrics import HexMetrics
+from data_logging.metrics.google.google_metrics import GoogleMetrics
 from data_logging.mongodb.mongo import MongoDB
 
 
@@ -11,7 +12,8 @@ def main():
     metrics = [
         DiscordMetrics(config),
         TwitterMetrics(config),
-        HexMetrics(config)
+        HexMetrics(config),
+        GoogleMetrics(config)
     ]
     # Creating db connection
     db = MongoDB(config)

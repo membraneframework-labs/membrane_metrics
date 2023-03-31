@@ -158,4 +158,5 @@ cython_debug/
 # PyCharm
 .idea/
 
+# Google Analytics v4 API secrets
 client_secrets.json

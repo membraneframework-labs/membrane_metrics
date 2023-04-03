@@ -16,15 +16,45 @@ class GoogleMetrics(Metrics):
         os.environ[
             "GOOGLE_APPLICATION_CREDENTIALS"
         ] = app_config.google_config.path_to_secrets_file
+        self.time_spent_per_day_entries = self.__get_time_spent_per_day()
+        self.unique_users_in_tutorials_per_day = (
+            self.__get_unique_users_in_tutorials_per_day()
+        )
+        self.unique_users_from_traffic_source_per_day = (
+            self.__get_unique_users_from_traffic_source_per_day()
+        )
+        self.bounce_rate_per_day = self.__get_bounce_rate_per_day()
 
     def get_metric_series(self) -> list[TimeSeries]:
         return (
-            [self.__get_time_spent(), self.__get_bounce_rate()]
-            + self.__get_unique_users_in_tutorials()
-            + self.__get_unique_users_in_tutorials()
+            [
+                TimeSeries(
+                    MongoCollection.GoogleTimeSpentPerDay,
+                    self.time_spent_per_day_entries,
+                ),
+                TimeSeries(
+                    MongoCollection.GoogleBounceRatePerDay, self.bounce_rate_per_day
+                ),
+            ]
+            + list(
+                map(
+                    lambda entries: TimeSeries(
+                        MongoCollection.GoogleUniqueUsersInTutorialPerDay, entries
+                    ),
+                    self.unique_users_in_tutorials_per_day,
+                )
+            )
+            + list(
+                map(
+                    lambda entries: TimeSeries(
+                        MongoCollection.GoogleUsersFromTrafficSourcePerDay, entries
+                    ),
+                    self.unique_users_from_traffic_source_per_day,
+                )
+            )
         )
 
-    def __get_time_spent(self) -> TimeSeries:
+    def __get_time_spent_per_day(self) -> List[TimeSeriesEntry]:
         total_time_spent_per_day = GoogleAPI.get_total_time_spent(
             GoogleMetrics.property_id, self.start_date, self.end_date
         )
@@ -32,14 +62,13 @@ class GoogleMetrics(Metrics):
             TimeSeriesEntry(day, total_time_spent_per_day[day])
             for day in total_time_spent_per_day.keys()
         ]
-        series = TimeSeries(MongoCollection.GoogleTimeSpentPerDay, entries)
-        return series
+        return entries
 
-    def __get_unique_users_in_tutorials(self) -> List[TimeSeries]:
+    def __get_unique_users_in_tutorials_per_day(self) -> List[List[TimeSeriesEntry]]:
         unique_users_in_tutorial_per_day = GoogleAPI.get_unique_users_in_tutorial(
             GoogleMetrics.property_id, self.start_date, self.end_date
         )
-        series_for_all_tutorials = []
+        list_of_entries_lists = []
         for tutorial_name in unique_users_in_tutorial_per_day.keys():
             entries = [
                 TimeSeriesEntry(day, value, meta_filed_value=tutorial_name)
@@ -47,29 +76,25 @@ class GoogleMetrics(Metrics):
                     tutorial_name
                 ].items()
             ]
-            series = TimeSeries(
-                MongoCollection.GoogleUniqueUsersInTutorialPerDay, entries
-            )
-            series_for_all_tutorials.append(series)
-        return series_for_all_tutorials
+            list_of_entries_lists.append(entries)
+        return list_of_entries_lists
 
-    def __get_unique_users_in_tutorials(self) -> List[TimeSeries]:
+    def __get_unique_users_from_traffic_source_per_day(
+        self,
+    ) -> List[List[TimeSeriesEntry]]:
         number_of_users_from_source_pers_day = GoogleAPI.get_users_source(
             GoogleMetrics.property_id, self.start_date, self.end_date
         )
-        series_for_all_sources = []
+        list_of_entries_lists = []
         for source in number_of_users_from_source_pers_day.keys():
             entries = [
                 TimeSeriesEntry(day, value, meta_filed_value=source)
                 for day, value in number_of_users_from_source_pers_day[source].items()
             ]
-            series = TimeSeries(
-                MongoCollection.GoogleUsersFromTrafficSourcePerDay, entries
-            )
-            series_for_all_sources.append(series)
-        return series_for_all_sources
+            list_of_entries_lists.append(entries)
+        return list_of_entries_lists
 
-    def __get_bounce_rate(self) -> TimeSeries:
+    def __get_bounce_rate_per_day(self) -> List[TimeSeriesEntry]:
         bounce_rate_per_day = GoogleAPI.get_bounce_rate(
             GoogleMetrics.property_id, self.start_date, self.end_date
         )
@@ -77,5 +102,4 @@ class GoogleMetrics(Metrics):
             TimeSeriesEntry(day, bounce_rate_per_day[day])
             for day in bounce_rate_per_day.keys()
         ]
-        series = TimeSeries(MongoCollection.GoogleBounceRatePerDay, entries)
-        return series
+        return entries

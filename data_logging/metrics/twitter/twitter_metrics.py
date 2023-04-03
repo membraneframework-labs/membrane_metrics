@@ -4,7 +4,7 @@ from config.app_config import AppConfig
 from data_logging.twitter.twitter_api import TwitterAPI
 from datetime import datetime, date, timedelta
 from data_logging.mongodb.collection import MongoCollection
-from typing import TypeVar
+from typing import TypeVar, List
 
 T = TypeVar("T")
 
@@ -21,13 +21,24 @@ class TwitterMetrics(Metrics):
             self.bearer_token, TwitterMetrics.username
         )
         
+        self.cumulative_engagements_number_per_day = (
+            self.__get_cumulative_engagements_number_per_day()
+        )
+        self.current_followers_number = self.__get_current_followers_number()
+        
+
     def get_metric_series(self) -> list[TimeSeries]:
         return [
-            self.__get_cumulative_engagements_number_per_day(),
-            self.__get_current_followers_number(),
+            TimeSeries(
+                MongoCollection.TwitterNumberOfFollowers, self.current_followers_number
+            ),
+            TimeSeries(
+                MongoCollection.TwitterCumulativeReactionsToRecentTweetsPerDay,
+                self.cumulative_engagements_number_per_day,
+            ),
         ]
 
-    def __get_cumulative_engagements_number_per_day(self) -> TimeSeries:
+    def __get_cumulative_engagements_number_per_day(self) -> List[TimeSeriesEntry]:
         tweet_ids = TwitterAPI.get_user_tweet_ids(
             self.user_id, self.bearer_token, TwitterMetrics.how_many_tweets_to_consider
         )
@@ -35,7 +46,10 @@ class TwitterMetrics(Metrics):
         results = {}
         for tweet_ids_chunk in chunked_tweet_ids:
             cumulative_reactions_number = TwitterAPI.get_engagements_per_day(
-                tweet_ids_chunk, self.bearer_token, self.start_datetime, self.end_datetime
+                tweet_ids_chunk,
+                self.bearer_token,
+                self.start_datetime,
+                self.end_datetime,
             )
             for day in cumulative_reactions_number.keys():
                 for hour in cumulative_reactions_number[day].keys():
@@ -48,19 +62,16 @@ class TwitterMetrics(Metrics):
             TimeSeriesEntry(timestamp, results[timestamp])
             for timestamp in results.keys()
         ]
-        series = TimeSeries(
-            MongoCollection.TwitterCumulativeReactionsToRecentTweetsPerDay, entries
-        )
-        return series
 
-    def __get_current_followers_number(self) -> TimeSeries:
+        return entries
+
+    def __get_current_followers_number(self) -> List[TimeSeriesEntry]:
         followers_number = TwitterAPI.get_current_number_of_followers(
             self.user_id, self.bearer_token
         )
         meassurement_date = datetime.now()
         entry = TimeSeriesEntry(meassurement_date, followers_number)
-        series = TimeSeries(MongoCollection.TwitterNumberOfFollowers, [entry])
-        return series
+        return [entry]
 
 
 def _chunk_list(list: list[T], chunk_size: int) -> list[list[T]]:

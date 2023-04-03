@@ -87,7 +87,7 @@ class GoogleAPI:
             ).date()
             source = row.dimension_values[1].value
             if source not in results_map:
-                results_map[source]={}
+                results_map[source] = {}
             results_map[source][date] = active_users
         return results_map
 

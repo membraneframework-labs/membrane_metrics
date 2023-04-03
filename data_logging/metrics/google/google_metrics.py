@@ -35,23 +35,13 @@ class GoogleMetrics(Metrics):
                 TimeSeries(
                     MongoCollection.GoogleBounceRatePerDay, self.bounce_rate_per_day
                 ),
+                TimeSeries(
+                        MongoCollection.GoogleUniqueUsersInTutorialPerDay, self.unique_users_in_tutorials_per_day
+                    ),
+                TimeSeries(
+                        MongoCollection.GoogleUsersFromTrafficSourcePerDay, self.unique_users_from_traffic_source_per_day
+                    )
             ]
-            + list(
-                map(
-                    lambda entries: TimeSeries(
-                        MongoCollection.GoogleUniqueUsersInTutorialPerDay, entries
-                    ),
-                    self.unique_users_in_tutorials_per_day,
-                )
-            )
-            + list(
-                map(
-                    lambda entries: TimeSeries(
-                        MongoCollection.GoogleUsersFromTrafficSourcePerDay, entries
-                    ),
-                    self.unique_users_from_traffic_source_per_day,
-                )
-            )
         )
 
     def __get_time_spent_per_day(self) -> List[TimeSeriesEntry]:
@@ -64,11 +54,11 @@ class GoogleMetrics(Metrics):
         ]
         return entries
 
-    def __get_unique_users_in_tutorials_per_day(self) -> List[List[TimeSeriesEntry]]:
+    def __get_unique_users_in_tutorials_per_day(self) -> List[TimeSeriesEntry]:
         unique_users_in_tutorial_per_day = GoogleAPI.get_unique_users_in_tutorial(
             GoogleMetrics.property_id, self.start_date, self.end_date
         )
-        list_of_entries_lists = []
+        cumulated_entries = []
         for tutorial_name in unique_users_in_tutorial_per_day.keys():
             entries = [
                 TimeSeriesEntry(day, value, meta_filed_value=tutorial_name)
@@ -76,23 +66,24 @@ class GoogleMetrics(Metrics):
                     tutorial_name
                 ].items()
             ]
-            list_of_entries_lists.append(entries)
-        return list_of_entries_lists
+            cumulated_entries.extend(entries)
+        return cumulated_entries
 
     def __get_unique_users_from_traffic_source_per_day(
         self,
-    ) -> List[List[TimeSeriesEntry]]:
+    ) -> List[TimeSeriesEntry]:
         number_of_users_from_source_pers_day = GoogleAPI.get_users_source(
             GoogleMetrics.property_id, self.start_date, self.end_date
         )
-        list_of_entries_lists = []
+        
+        cumulated_entries = []
         for source in number_of_users_from_source_pers_day.keys():
             entries = [
                 TimeSeriesEntry(day, value, meta_filed_value=source)
                 for day, value in number_of_users_from_source_pers_day[source].items()
             ]
-            list_of_entries_lists.append(entries)
-        return list_of_entries_lists
+            cumulated_entries.extend(entries)
+        return cumulated_entries
 
     def __get_bounce_rate_per_day(self) -> List[TimeSeriesEntry]:
         bounce_rate_per_day = GoogleAPI.get_bounce_rate(

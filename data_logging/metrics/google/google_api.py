@@ -14,7 +14,6 @@ TutorialName = NewType("Tutorial Name", str)
 
 
 class GoogleAPI:
-    sources: List[TrafficSource] = ["github.com", "t.co", "google", "(direct)"]
     request_date_format: str = "%Y-%m-%d"
     response_date_format: str = "%Y%m%d"
 
@@ -70,7 +69,7 @@ class GoogleAPI:
     def get_users_source(
         property_id, start_date: date, end_date: date
     ) -> Dict[TrafficSource, Dict[date, int]]:
-        results_map = dict.fromkeys(GoogleAPI.sources, {})
+        results_map = {}
         client = BetaAnalyticsDataClient()
         start_date_str = start_date.strftime(GoogleAPI.request_date_format)
         end_date_str = end_date.strftime(GoogleAPI.request_date_format)
@@ -87,8 +86,9 @@ class GoogleAPI:
                 row.dimension_values[0].value, GoogleAPI.response_date_format
             ).date()
             source = row.dimension_values[1].value
-            if source in GoogleAPI.sources:
-                results_map[source][date] = active_users
+            if source not in results_map:
+                results_map[source]={}
+            results_map[source][date] = active_users
         return results_map
 
     @staticmethod

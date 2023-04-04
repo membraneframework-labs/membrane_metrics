@@ -6,6 +6,7 @@ from data_logging.time_series import TimeSeries
 
 DATABASE_NAME = 'Discord'
 
+
 class MongoDB:
     def __init__(self, config: AppConfig) -> None:
         self.client: MongoClient = MongoClient(config.mongodb_connection_url)
@@ -14,7 +15,8 @@ class MongoDB:
     def write_time_series(self, time_series: TimeSeries) -> None:
         db_collection = self.db[time_series.collection.name]
         collection_time_series = {
-            (document['date'], document.get(time_series.collection.get_meta_field_name(), None)) for document in db_collection.find({})}
+            (document['date'], document.get(time_series.collection.get_meta_field_name(), None)) for document in
+            db_collection.find({})}
         filtered_time_series = TimeSeries(
             time_series.collection,
             list(filter(

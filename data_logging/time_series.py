@@ -40,4 +40,3 @@ class TimeSeries:
             data_points.append(data_point)
 
         return data_points
- 

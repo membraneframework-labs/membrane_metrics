@@ -27,16 +27,18 @@ class TimeSeriesEntry:
 @dataclass
 class TimeSeries:
     collection: MongoCollection
-    values: list[TimeSeriesEntry]
+    entries: list[TimeSeriesEntry]
 
     def to_mongo_format(self) -> list[dict]:
         data_points = []
-        for entry in self.values:
-            data_point = {"date": entry.date,
-                          self.collection.get_value_field_name(): entry.value}
+        for entry in self.entries:
+            data_point = {"date": entry.date, self.collection.get_value_field_name(): entry.value}
             if entry.meta_field_value is not None:
-                data_point[self.collection.get_meta_field_name()
-                ] = entry.meta_field_value
+                data_point[self.collection.get_meta_field_name()] = entry.meta_field_value
             data_points.append(data_point)
 
         return data_points
+
+    def filter_default_value(self):
+        self.entries = list(filter(
+            lambda entry: entry.value != self.collection.get_default_value(), self.entries))

@@ -24,14 +24,20 @@ app.layout = html.Div([
     dcc.Graph(id='graph-content')
 ])
 
-def fill_none_value(df, collection):
+def densify(df, collection):
     match collection:
         case MongoCollection.HexCumulativePackagesDownloads:
-            df = df.dropna()
+            pass
         case MongoCollection.DiscordMembersAtDay:
-            df = df.dropna()
+            pass
         case default:
+            df.set_index("date",drop=True,inplace=True)
+            df.index = pd.to_datetime(df.index)
+            idx = pd.date_range(date.today()-timedelta(days=HOW_MANY_DAYS), date.today())
+            #idx = pd.date_range(df.index.min(), df.index.max())
+            df=df.reindex(idx)
             df[df[collection.get_value_field_name()].isnull()] = 0
+            df['date']=df.index
     return df
 
 @callback(
@@ -64,28 +70,21 @@ def update_checkbox(collection_str):
     Input('categories-selection', 'value')
 )
 def update_graph(categories):
-    dffs = []
+    dfs_to_display = []
     if not isinstance(categories, list):
         categories = [categories]
-    for value in categories:
-        if value == "Total":
-            dff = df.groupby("date").sum().reset_index()
-        elif value == "Value":
-            dff = df
+    for category in categories:
+        if category == "Total":
+            df_for_category = df.groupby("date").sum().reset_index()
+        elif category == "Value":
+            df_for_category = df
         else:
-            dff = df[df[collection.get_meta_field_name()]==value]
-        dff.set_index("date",drop=True,inplace=True)
-        dff.index = pd.to_datetime(dff.index)
-        idx = pd.date_range(date.today()-timedelta(days=HOW_MANY_DAYS), date.today())
-        #idx = pd.date_range(dff.index.min(), dff.index.max())
-        dff=dff.reindex(idx)
-        dff = fill_none_value(dff, collection)
-        print(dff)
-        dff['date']=dff.index
-        dff[collection.get_meta_field_name()] = value
-        dffs.append(dff)
-    final_dff = pd.concat(dffs)
-    return px.line(final_dff, x='date', y=collection.get_value_field_name(), color=collection.get_meta_field_name())
+            df_for_category = df[df[collection.get_meta_field_name()]==category]
+        df_for_category = densify(df_for_category, collection)
+        df_for_category[collection.get_meta_field_name()] = category
+        dfs_to_display.append(df_for_category)
+    final_df = pd.concat(dfs_to_display)
+    return px.line(final_df, x='date', y=collection.get_value_field_name(), color=collection.get_meta_field_name())
 
 if __name__ == '__main__':
     app.run_server(debug=True)

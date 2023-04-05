@@ -28,7 +28,7 @@ class DiscordGuild:
         new_joins = Counter(members_joins)
 
         members_at_days = []
-        for day in pd.date_range(start_date, end_date).date:
+        for day in pd.date_range(start_date, end_date, inclusive='left').date:
             members_at_day = members_previous_day + new_joins[day]
             members_at_days.append((day, members_at_day))
             members_previous_day = members_at_day
@@ -44,6 +44,6 @@ class DiscordGuild:
             messages_stats = Counter(messages_series)
             time_series_entries += \
                 [TimeSeriesEntry(day, messages_stats[day], channel_name)
-                 for day in pd.date_range(start_date, end_date).date]
+                 for day in pd.date_range(start_date, end_date, inclusive='left').date]
 
         return time_series_entries

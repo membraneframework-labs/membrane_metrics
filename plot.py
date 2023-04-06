@@ -19,7 +19,7 @@ df = None
 
 app.layout = html.Div([
     html.H1(children='Membrane Community Metrics', style={'textAlign':'center'}),
-    dcc.Dropdown(all_collections, value="GoogleUniqueUsersInTutorialPerDay", id="collection-selection", clearable=False),
+    dcc.Dropdown(all_collections, value="GoogleUsersInTutorialPerDay", id="collection-selection", clearable=False),
     dcc.Dropdown(id='categories-selection', value=["Total"], clearable=False),
     dcc.Graph(id='graph-content')
 ])
@@ -51,7 +51,7 @@ def update_checkbox(collection_str):
     global collection
     collection = MongoCollection(collection_str)
     global df
-    df = pd.DataFrame(mongo.get(collection))
+    df = pd.DataFrame(mongo.get_collection_with_query(collection))
     if collection.get_meta_field_name() in df:
         options = ["Total"]+list(df[collection.get_meta_field_name()].unique())
         value = [options[0]]
@@ -75,7 +75,7 @@ def update_graph(categories):
         categories = [categories]
     for category in categories:
         if category == "Total":
-            df_for_category = df.groupby("date").sum().reset_index()
+            df_for_category = df.drop(["_id", collection.get_meta_field_name()], axis=1).groupby("date").sum().reset_index()
         elif category == "Value":
             df_for_category = df
         else:

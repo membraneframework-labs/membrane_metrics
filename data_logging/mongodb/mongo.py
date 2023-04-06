@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from data_logging.mongodb.collection import MongoCollection
 from pymongo.database import Database
 
 from config.app_config import AppConfig
@@ -26,3 +27,9 @@ class MongoDB:
         to_insert = filtered_time_series.to_mongo_format()
         if len(to_insert) > 0:
             collection.insert_many(to_insert)
+
+    def get_collection_with_query(self, collection: MongoCollection, query=""):
+        results = [result for result in self.db[collection.name].find(query).sort("date", 1)]
+        return results
+        
+        

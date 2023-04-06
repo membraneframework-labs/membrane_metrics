@@ -1,5 +1,6 @@
-import requests
 import time
+
+import requests
 
 base_url: str = "https://hex.pm/api"
 
@@ -16,7 +17,10 @@ def get_number_of_all_downloads(package_name: str) -> int:
 
 def _send_get_request(endpoint: str, params: dict = {}) -> dict:
     response = requests.get(f"{base_url}{endpoint}", params=params)
-    if response.status_code==429 and int(response.headers["X-RateLimit-Remaining"])==0:
+    if (
+        response.status_code == 429
+        and int(response.headers["X-RateLimit-Remaining"]) == 0
+    ):
         time_to_sleep = float(response.headers["X-RateLimit-Reset"]) - time.time()
         time.sleep(time_to_sleep)
         return _send_get_request(endpoint, params)

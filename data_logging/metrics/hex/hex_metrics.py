@@ -1,9 +1,10 @@
 from datetime import date
-from data_logging.metrics.metrics import Metrics
+
+import data_logging.metrics.hex.hex_api as hex_api
 from config.app_config import AppConfig
-from data_logging.time_series import TimeSeries, TimeSeriesEntry
-import data_logging.metrics.hex.hex_api as HexAPI
+from data_logging.metrics.metrics import Metrics
 from data_logging.mongodb.collection import MongoCollection
+from data_logging.time_series import TimeSeries, TimeSeriesEntry
 
 
 class HexMetrics(Metrics):
@@ -26,9 +27,9 @@ class HexMetrics(Metrics):
 
 
 def _get_cumulative_downloads() -> int:
-    packages = HexAPI.get_user_owned_packages(HexMetrics.organization_name)
+    packages = hex_api.get_user_owned_packages(HexMetrics.organization_name)
     cumulative_downloads = 0
     for package in packages:
-        how_many_downloads = HexAPI.get_number_of_all_downloads(package)
+        how_many_downloads = hex_api.get_number_of_all_downloads(package)
         cumulative_downloads += how_many_downloads
     return cumulative_downloads

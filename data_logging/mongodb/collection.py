@@ -26,9 +26,4 @@ class MongoCollection(Enum):
             case MongoCollection.DiscordMessagesPerDayPerChannel:
                 return "channel"
             case default:
-                raise NotImplementedError(
-                    f'get_meta_field_name is not implemented for {self} collection')
-
-    @staticmethod
-    def get_default_value() -> float:
-        return 0
+                return None

@@ -39,6 +39,20 @@ def send_get_request(token: BotToken, endpoint: str, params: dict = {}):
 
 
 def get_guild_members(bot_token: BotToken, guild_id: GuildID) -> pd.DataFrame:
+    """ Returns guild members df with guild members objects.
+    Reference: https://discord.com/developers/docs/resources/guild#guild-member-object
+
+    Returns:
+        pd.DataFrame: columns:
+        [
+            'avatar', 'communication_disabled_until', 'flags', 'is_pending',
+            'joined_at', 'nick', 'pending', 'premium_since', 'roles', 'mute',
+            'deaf', 'user.id', 'user.username', 'user.global_name',
+            'user.display_name', 'user.avatar', 'user.avatar_decoration',
+            'user.discriminator', 'user.public_flags', 'user.bot'
+        ]
+    """
+
     params = {'limit': MAX_MEMBERS_REQUEST_LIMIT}
     guild_members_objects = send_get_request(
         bot_token, f'/guilds/{guild_id}/members', params)
@@ -58,7 +72,10 @@ def get_guild_members(bot_token: BotToken, guild_id: GuildID) -> pd.DataFrame:
 
 def get_guild_messages(bot_token: BotToken, guild_id: GuildID) -> dict[str, pd.DataFrame]:
     """
-    Returns dict channel name -> channel messages
+    Returns dict with channel names as keys and channel messages df.
+
+    df columns are based on returned message objects:
+        https://discord.com/developers/docs/resources/channel#message-object
     """
 
     guild_channels_objects = send_get_request(
@@ -90,8 +107,8 @@ def _get_guild_forum_messages(bot_token: BotToken, guild_id: GuildID, guild_foru
 
     all_active_threads = send_get_request(
         bot_token, f'/guilds/{guild_id}/threads/active')['threads']
-    threads += list(filter(lambda thread: thread['parent_id']
-                                          == guild_forum_channel_id, all_active_threads))
+    threads += list(filter(lambda thread:
+                           thread['parent_id'] == guild_forum_channel_id, all_active_threads))
 
     threads += send_get_request(
         bot_token, f'/channels/{guild_forum_channel_id}/threads/archived/public')['threads']

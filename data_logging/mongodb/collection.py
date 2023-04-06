@@ -27,3 +27,7 @@ class MongoCollection(Enum):
                 return "channel"
             case default:
                 return None
+
+    @staticmethod
+    def get_default_value() -> float:
+        return 0

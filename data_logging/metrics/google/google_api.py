@@ -8,9 +8,9 @@ from google.analytics.data_v1beta.types import (
 from datetime import date, datetime
 from typing import Dict, List, NewType
 
-PropertyId = NewType("Property ID", str)
-TrafficSource = NewType("Traffic Source", str)
-TutorialName = NewType("Tutorial Name", str)
+PropertyId = NewType("PropertyID", str)
+TrafficSource = NewType("TrafficSource", str)
+TutorialName = NewType("TutorialName", str)
 
 
 class GoogleAPI:

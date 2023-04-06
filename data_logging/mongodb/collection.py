@@ -34,8 +34,6 @@ class MongoCollection(Enum):
 
     def get_meta_field_name(self) -> Optional[str]:
         match self:
-            case MongoCollection.DiscordMembersAtDay:
-                return None
             case MongoCollection.DiscordMessagesPerDayPerChannel:
                 return "channel"
             case MongoCollection.GoogleUsersInTutorialPerDay:

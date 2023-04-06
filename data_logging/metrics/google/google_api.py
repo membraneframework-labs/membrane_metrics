@@ -33,7 +33,7 @@ class GoogleAPI:
         response = client.run_report(request)
         date_result_map = {}
         for row in response.rows:
-            avarage_session_duration = float(row.metric_values[0].value)
+            average_session_duration = float(row.metric_values[0].value)
             sessions = int(row.metric_values[1].value)
             all_sessions_duration = avarage_session_duration * sessions  # in seconds
             date = datetime.strptime(

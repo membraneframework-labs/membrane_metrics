@@ -4,10 +4,7 @@ from pymongo.database import Database
 
 from config.app_config import AppConfig
 from data_logging.time_series import TimeSeries
-<<<<<<< HEAD
-=======
 from data_logging.mongodb.collection import MongoCollection
->>>>>>> 8eba9e5 (implement metrics visualization)
 
 DATABASE_NAME = 'Discord'
 
@@ -42,8 +39,3 @@ class MongoDB:
             list(filter(lambda entry: (entry.date, entry.meta_field_value) not in previously_logged_entries,
                         time_series.entries))
         )
-<<<<<<< HEAD
-=======
-
-    
->>>>>>> 8eba9e5 (implement metrics visualization)

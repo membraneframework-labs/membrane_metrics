@@ -9,7 +9,8 @@ from config.app_config import AppConfig
 from data_logging.mongodb.collection import MongoCollection
 from data_logging.mongodb.mongo import MongoDB
 
-HOW_MANY_DAYS_BACK = 90
+HOW_MANY_DAYS_BACK = 180
+WINDOWS_SIZE = 30
 
 app = Dash(__name__)
 server = app.server
@@ -34,6 +35,11 @@ app.layout = html.Div(
     ]
 )
 
+def _transform(df: pd.DataFrame, collection: MongoCollection) -> pd.DataFrame:
+    match collection:
+        case MongoCollection.GoogleBounceRatePerDay:
+            df[collection.get_value_field_name()] = df.rolling(window=WINDOWS_SIZE).mean()
+    return df
 
 def _densify(df: pd.DataFrame, collection: MongoCollection) -> pd.DataFrame:
     match collection:
@@ -50,6 +56,7 @@ def _densify(df: pd.DataFrame, collection: MongoCollection) -> pd.DataFrame:
             df = df.reindex(idx)
             df[df[collection.get_value_field_name()].isnull()] = 0
             df["date"] = df.index
+            df = _transform(df, collection)
     return df
 
 

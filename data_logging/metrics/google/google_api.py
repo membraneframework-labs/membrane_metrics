@@ -20,26 +20,26 @@ class GoogleAPI:
     property_id: PropertyId = "321354678"
 
     @staticmethod
-    def get_total_time_spent(start_date: date, end_date: date) -> Dict[date, float]:
+    def get_average_user_enganement_duration(start_date: date, end_date: date) -> Dict[date, float]:
         client = BetaAnalyticsDataClient()
         start_date_str = start_date.strftime(GoogleAPI.request_date_format)
         end_date_str = end_date.strftime(GoogleAPI.request_date_format)
         request = RunReportRequest(
             property=f"properties/{GoogleAPI.property_id}",
             dimensions=[Dimension(name="date")],
-            metrics=[Metric(name="averageSessionDuration"), Metric(name="sessions")],
+            metrics=[Metric(name="userEngagementDuration"), Metric(name="sessions")],
             date_ranges=[DateRange(start_date=start_date_str, end_date=end_date_str)],
         )
         response = client.run_report(request)
         date_result_map = {}
         for row in response.rows:
-            average_session_duration = float(row.metric_values[0].value)
+            user_engagement_duration = float(row.metric_values[0].value)
             sessions = int(row.metric_values[1].value)
-            all_sessions_duration = average_session_duration * sessions  # in seconds
+            average_session_engagement_duration = user_engagement_duration/sessions  # in seconds
             day = datetime.strptime(
                 row.dimension_values[0].value, GoogleAPI.response_date_format
             ).date()
-            date_result_map[day] = all_sessions_duration
+            date_result_map[day] = average_session_engagement_duration
         return date_result_map
 
     @staticmethod

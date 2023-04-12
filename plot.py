@@ -117,13 +117,9 @@ def update_graph(metric_subcategories: list[str], metric_type: str) -> Figure:
 def _transform(df: pd.DataFrame, collection: MongoCollection) -> pd.DataFrame:
     match collection:
         case MongoCollection.GoogleBounceRatePerDay:
-            df[collection.get_value_field_name()] = df.rolling(
-                window=WINDOWS_SIZE
-            ).mean()
-        case MongoCollection.GoogleTimeSpentPerDay:
-            df[collection.get_value_field_name()] = df.rolling(
-                window=WINDOWS_SIZE
-            ).mean()
+            df[collection.get_value_field_name()] = (
+                df.drop(["_id", "date"], axis=1).rolling(window=WINDOWS_SIZE).mean()
+            )
     return df
 
 

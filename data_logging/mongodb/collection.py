@@ -10,7 +10,6 @@ class MongoCollection(Enum):
     GoogleUsersInTutorialPerDay = "GoogleUsersInTutorialPerDay"
     GoogleUsersFromTrafficSourcePerDay = "GoogleUsersFromTrafficSourcePerDay"
     GoogleBounceRatePerDay = "GoogleBounceRatePerDay"
-    
 
     def get_value_field_name(self) -> str:
         match self:
@@ -30,7 +29,8 @@ class MongoCollection(Enum):
                 return "google_bounce_rate_per_day"
             case default:
                 raise NotImplementedError(
-                    f'get_value_field_name is not implemented for {self} collection')
+                    f"get_value_field_name is not implemented for {self} collection"
+                )
 
     def get_meta_field_name(self) -> Optional[str]:
         match self:
@@ -42,6 +42,27 @@ class MongoCollection(Enum):
                 return "traffic_source"
             case default:
                 return None
+
+    def get_friendly_name(self) -> str:
+        match self:
+            case MongoCollection.DiscordMembersAtDay:
+                return "Number of Discord users in given day"
+            case MongoCollection.DiscordMessagesPerDayPerChannel:
+                return "Number of messages in given Discord channel in given day"
+            case MongoCollection.HexCumulativePackagesDownloads:
+                return (
+                    "Cumulative number of Membrane packages downloads up to a given day"
+                )
+            case MongoCollection.GoogleTimeSpentPerDay:
+                return "Avarage session duration in given day"
+            case MongoCollection.GoogleUsersInTutorialPerDay:
+                return "Number of users visiting given tutorial in given day"
+            case MongoCollection.GoogleUsersFromTrafficSourcePerDay:
+                return "Number of users from different traffic sources in given day"
+            case MongoCollection.GoogleBounceRatePerDay:
+                return "Moving average of bounce rate for a given day"
+            case default:
+                return ""
 
     @staticmethod
     def get_default_value() -> float:

@@ -12,9 +12,9 @@ from data_logging.mongodb.mongo import MongoDB
 
 DEFAULT_DATE_RANGE: int = 90  # days
 DENSIFY_UP_TO: int = 360  # days
-WINDOWS_SIZE: int = 30  # days
+WINDOWS_SIZE: int = 7  # days
 DATE_FORMAT: str = "%Y-%m-%d"
-ALL_METRIC_TYPES = ["Discord", "Hex", "Google Analytics"]
+ALL_METRIC_TYPES = ["Discord", "Google Analytics", "Hex"]
 
 app = Dash(__name__)
 server = app.server
@@ -50,9 +50,10 @@ def update_div(metric_type: str) -> list[dcc]:
     Output({"type": "metric-subcategory-selection", "index": MATCH}, "value"),
     Output({"type": "metric-subcategory-selection", "index": MATCH}, "multi"),
     Output({"type": "metric-subcategory-selection", "index": MATCH}, "disabled"),
+    Output({"type": "metric-subcategory-selection", "index": MATCH}, "style"),
     Input({"type": "metric-collection-name", "index": MATCH}, "children"),
 )
-def update_dropdown(metric_type: str) -> tuple[list[str], str, bool, bool]:
+def update_dropdown(metric_type: str) -> tuple[list[str], str, bool, bool, dict]:
     collection = MongoCollection(metric_type)
     df = pd.DataFrame(mongo.get_collection(collection))
     if collection.get_meta_field_name() in df:
@@ -60,13 +61,15 @@ def update_dropdown(metric_type: str) -> tuple[list[str], str, bool, bool]:
         value = _get_default_subcategory(collection)
         multi = True
         disabled = False
+        style = {}
     else:
         options = ["Value"]
         value = "Value"
         multi = False
         disabled = True
+        style = {"visibility": "hidden"}
 
-    return options, value, multi, disabled
+    return options, value, multi, disabled, style
 
 
 @callback(

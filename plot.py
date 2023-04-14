@@ -11,7 +11,7 @@ from data_logging.mongodb.mongo import MongoDB
 
 
 DEFAULT_DATE_RANGE: int = 90  # days
-DENSIFY_UP_TO: int = 360  # days
+DENSIFY_UP_TO: int = 1080  # days
 WINDOWS_SIZE: int = 7  # days
 DATE_FORMAT: str = "%Y-%m-%d"
 ALL_METRIC_TYPES = ["Discord", "Google Analytics", "Hex"]

@@ -28,7 +28,7 @@ app.layout = html.Div(
             value="Discord",
             id="metric-type-selection",
             clearable=False,
-            style={"background-color": "#C0C0F0"},
+            style={"background-color": "#87CCE8"},
         ),
         html.Div([]),
         html.Div([], id="graphs-div"),

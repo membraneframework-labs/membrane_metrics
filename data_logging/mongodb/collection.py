@@ -46,19 +46,19 @@ class MongoCollection(Enum):
     def get_friendly_name(self) -> str:
         match self:
             case MongoCollection.DiscordMembersAtDay:
-                return "Number of Discord users in given day"
+                return "Number of Discord users on a given day"
             case MongoCollection.DiscordMessagesPerDayPerChannel:
-                return "Number of messages in given Discord channel in given day"
+                return "Number of messages on a given Discord channel on a given day"
             case MongoCollection.HexCumulativePackagesDownloads:
                 return (
                     "Cumulative number of Membrane packages downloads up to a given day"
                 )
             case MongoCollection.GoogleTimeSpentPerDay:
-                return "Avarage session duration in given day"
+                return "Avarage session duration on a given day"
             case MongoCollection.GoogleUsersInTutorialPerDay:
-                return "Number of users visiting given tutorial in given day"
+                return "Number of users visiting given tutorial on a given day"
             case MongoCollection.GoogleUsersFromTrafficSourcePerDay:
-                return "Number of users from different traffic sources in given day"
+                return "Number of users from different traffic sources on a given day"
             case MongoCollection.GoogleBounceRatePerDay:
                 return "Moving average of bounce rate for a given day"
             case default:

@@ -11,6 +11,7 @@ class AppConfig:
     mongodb_connection_url = str
     discord_config: DiscordConfig
     google_config: GoogleConfig
+    plots_auth: dict
 
     def __init__(self):
         with open("config.toml", "rb") as file:
@@ -20,6 +21,8 @@ class AppConfig:
         self.mongodb_connection_url = config["mongodb"]["url"]
         self.discord_config = AppConfig.get_discord_config(config)
         self.google_config = AppConfig.get_google_config(config)
+        self.plots_auth = {config["plots"]["username"]: config["plots"]["password"]}
+
 
     @staticmethod
     def get_discord_config(config: dict) -> DiscordConfig:

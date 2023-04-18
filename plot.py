@@ -19,11 +19,8 @@ ALL_METRIC_TYPES = ["Discord", "Google Analytics", "Hex"]
 
 dash_app = Dash(__name__)
 server = dash_app.server
-
 config = AppConfig()
-
-auth = dash_auth.BasicAuth(dash_app, config.plots_auth)
-
+auth = dash_auth.BasicAuth(dash_app, config.plots_config.get_authentication_dict())
 mongo = MongoDB(config)
 dash_app.layout = html.Div(
     [

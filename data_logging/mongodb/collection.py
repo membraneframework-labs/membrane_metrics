@@ -54,7 +54,7 @@ class MongoCollection(Enum):
                     "Cumulative number of Membrane packages downloads up to a given day"
                 )
             case MongoCollection.GoogleTimeSpentPerDay:
-                return "Avarage session duration on a given day"
+                return "Average session duration on a given day"
             case MongoCollection.GoogleUsersInTutorialPerDay:
                 return "Number of users visiting given tutorial on a given day"
             case MongoCollection.GoogleUsersFromTrafficSourcePerDay:

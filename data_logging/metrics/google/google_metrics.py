@@ -49,12 +49,12 @@ class GoogleMetrics(Metrics):
         ]
 
     def __get_time_spent_per_day(self) -> List[TimeSeriesEntry]:
-        total_time_spent_per_day = GoogleAPI.get_total_time_spent(
+        average_user_enganement_duration_per_day = GoogleAPI.get_average_user_enganement_duration(
             self.start_date, self.end_date
         )
         entries = [
-            TimeSeriesEntry(day, total_time_spent_per_day[day])
-            for day in total_time_spent_per_day.keys()
+            TimeSeriesEntry(day, average_user_enganement_duration_per_day[day])
+            for day in average_user_enganement_duration_per_day.keys()
         ]
         return entries
 

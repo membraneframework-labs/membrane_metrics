@@ -4,6 +4,7 @@ from pymongo.database import Database
 
 from config.app_config import AppConfig
 from data_logging.time_series import TimeSeries
+from data_logging.mongodb.collection import MongoCollection
 
 DATABASE_NAME = 'Discord'
 
@@ -22,6 +23,10 @@ class MongoDB:
         to_insert = filtered_time_series.to_mongo_format()
         if len(to_insert) > 0:
             db_collection.insert_many(to_insert)
+
+    def get_collection(self, collection: MongoCollection, query={}):
+        db_collection = self.db[collection.name]
+        return db_collection.find(query).sort("date", 1)
 
     @staticmethod
     def __filter_previously_logged_entries(time_series: TimeSeries, db_collection: Collection) -> TimeSeries:

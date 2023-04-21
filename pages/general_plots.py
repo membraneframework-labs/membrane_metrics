@@ -2,11 +2,11 @@ import pandas as pd
 from dash import MATCH, Input, Output, callback, dcc, html
 from plotly.graph_objects import Figure
 import dash
-# import sys
-# import os
-# current = os.path.dirname(os.path.realpath(__file__))
-# parent = os.path.dirname(current)
-# sys.path.append(parent)
+import sys
+import os
+current = os.path.dirname(os.path.realpath(__file__))
+parent = os.path.dirname(current)
+sys.path.append(parent)
 from config.app_config import AppConfig
 from data_logging.mongodb.collection import MongoCollection
 from data_logging.mongodb.mongo import MongoDB

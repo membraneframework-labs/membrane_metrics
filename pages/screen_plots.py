@@ -1,11 +1,11 @@
 
 import dash
 from dash import dcc, html
-# import sys
-# import os
-# current = os.path.dirname(os.path.realpath(__file__))
-# parent = os.path.dirname(current)
-# sys.path.append(parent)
+import sys
+import os
+current = os.path.dirname(os.path.realpath(__file__))
+parent = os.path.dirname(current)
+sys.path.append(parent)
 from data_logging.mongodb.collection import MongoCollection
 from plots import update_graph
 

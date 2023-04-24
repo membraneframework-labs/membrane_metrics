@@ -4,6 +4,7 @@ from dash import Dash, html
 
 from config.app_config import AppConfig
 
+
 # Monkey patch basic auth to work on non-index pages
 def basic_auth_wrapper(basic_auth, func):
     """Updated auth wrapper to work on all pages rather than just index"""

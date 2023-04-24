@@ -2,6 +2,7 @@ from datetime import date, timedelta
 
 import pandas as pd
 import plotly.express as px
+from dash import dcc, html
 from plotly.graph_objects import Figure
 
 from data_logging.mongodb.collection import MongoCollection
@@ -36,6 +37,7 @@ def _densify(
             idx = pd.date_range(
                 date.today() - timedelta(days=how_many_days_back), date.today()
             )
+            print(df[df.index.duplicated()])
             df = df.reindex(idx)
             df[df[collection.get_value_field_name()].isnull()] = 0
             df["date"] = df.index
@@ -83,3 +85,27 @@ def update_graph(
         y=collection.get_value_field_name(),
         color=collection.get_meta_field_name(),
     ).update_layout(xaxis_range=[daterange_end, daterange_start])
+
+
+def prepare_static_layout(plots_to_display, mongo, class_name="box"):
+    children = []
+    for collection_name in plots_to_display.keys():
+        collection = MongoCollection(collection_name)
+        (graph_div,) = (
+            html.Div(
+                className=class_name,
+                children=[
+                    html.H2(
+                        children=collection.get_friendly_name(),
+                        style={"text-align": "center"},
+                    ),
+                    dcc.Graph(
+                        figure=update_graph(
+                            plots_to_display[collection_name], collection_name, mongo
+                        )
+                    ),
+                ],
+            ),
+        )
+        children.append(graph_div)
+    return html.Div(children)

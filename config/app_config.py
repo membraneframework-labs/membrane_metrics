@@ -4,6 +4,8 @@ import tomli
 
 from config.discord_config import DiscordConfig, BotToken, GuildID
 from config.google_config import GoogleConfig
+from config.plots_config import PlotsConfig
+
 
 class AppConfig:
     start_date: date
@@ -11,6 +13,7 @@ class AppConfig:
     mongodb_connection_url = str
     discord_config: DiscordConfig
     google_config: GoogleConfig
+    plots_config: PlotsConfig
 
     def __init__(self):
         with open("config.toml", "rb") as file:
@@ -20,13 +23,16 @@ class AppConfig:
         self.mongodb_connection_url = config["mongodb"]["url"]
         self.discord_config = AppConfig.get_discord_config(config)
         self.google_config = AppConfig.get_google_config(config)
+        self.plots_config = PlotsConfig(
+            config["plots"]["username"], config["plots"]["password"]
+        )
 
     @staticmethod
     def get_discord_config(config: dict) -> DiscordConfig:
         bot_token = BotToken(config["discord"]["bot_token"])
         guild_id = GuildID(config["discord"]["guild_id"])
         return DiscordConfig(bot_token, guild_id)
-    
+
     @staticmethod
     def get_google_config(config: dict) -> GoogleConfig:
         path_to_secrets_file = config["google"]["secrets_file_path"]

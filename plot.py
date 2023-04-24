@@ -1,14 +1,15 @@
 from datetime import date, timedelta
 
+import dash_auth
 import pandas as pd
 import plotly.express as px
+import tomli
+from dash import MATCH, Dash, Input, Output, callback, dcc, html
 from plotly.graph_objects import Figure
-from dash import Dash, Input, Output, callback, dcc, html, MATCH
 
 from config.app_config import AppConfig
 from data_logging.mongodb.collection import MongoCollection
 from data_logging.mongodb.mongo import MongoDB
-
 
 DEFAULT_DATE_RANGE: int = 90  # days
 DENSIFY_UP_TO: int = 1080  # days
@@ -16,11 +17,12 @@ WINDOWS_SIZE: int = 7  # days
 DATE_FORMAT: str = "%Y-%m-%d"
 ALL_METRIC_TYPES = ["Discord", "Google Analytics", "Hex"]
 
-app = Dash(__name__)
-server = app.server
+dash_app = Dash(__name__)
+server = dash_app.server
 config = AppConfig()
+auth = dash_auth.BasicAuth(dash_app, config.plots_config.get_authentication_dict())
 mongo = MongoDB(config)
-app.layout = html.Div(
+dash_app.layout = html.Div(
     [
         html.H1(children="Membrane Community Metrics", style={"textAlign": "center"}),
         dcc.Dropdown(
@@ -215,4 +217,4 @@ def _get_graph_div_for_collection(collection: MongoCollection, i: int) -> dcc:
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    dash_app.run(debug=True)

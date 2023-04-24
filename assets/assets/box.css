@@ -1,0 +1,23 @@
+body, html {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+
+.box {
+    box-sizing: border-box;
+    float: left;
+    width: 50%;
+    height: 20%;
+}
+
+.box:first-child {
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+}
+.box:nth-child(2) {
+    border-bottom: 1px solid black;
+}
+.box:nth-child(3) {
+    border-right: 1px solid black;
+}

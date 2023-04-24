@@ -1,22 +1,17 @@
+from datetime import date, timedelta
+
+import pandas as pd
+import plotly.express as px
+from plotly.graph_objects import Figure
+
 from data_logging.mongodb.collection import MongoCollection
 from data_logging.mongodb.mongo import MongoDB
-from plotly.graph_objects import Figure
-import pandas as pd
-from datetime import date, timedelta
-import plotly.express as px
-from dash import Dash
-from config.app_config import AppConfig
-import dash_auth
-import dash
-from dash import html
 
 DEFAULT_DATE_RANGE: int = 90  # days
 DENSIFY_UP_TO: int = 1080  # days
 WINDOWS_SIZE: int = 7  # days
 DATE_FORMAT: str = "%Y-%m-%d"
 
-config = AppConfig()
-mongo = MongoDB(config)
 
 def _transform(df: pd.DataFrame, collection: MongoCollection) -> pd.DataFrame:
     match collection:
@@ -47,7 +42,10 @@ def _densify(
             df = _transform(df, collection)
     return df
 
-def update_graph(metric_subcategories: list[str], metric_type: str) -> Figure:
+
+def update_graph(
+    metric_subcategories: list[str], metric_type: str, mongo: MongoDB
+) -> Figure:
     collection = MongoCollection(metric_type)
     dfs_to_display = []
     if not isinstance(metric_subcategories, list):
@@ -85,16 +83,3 @@ def update_graph(metric_subcategories: list[str], metric_type: str) -> Figure:
         y=collection.get_value_field_name(),
         color=collection.get_meta_field_name(),
     ).update_layout(xaxis_range=[daterange_end, daterange_start])
-
-
-if __name__ == "__main__":
-    dash_app = Dash(__name__, use_pages=True)
-    dash_app.layout = html.Div([
-        dash.page_container
-    ])
-    config = AppConfig()
-    mongo = MongoDB(config)
-    auth = dash_auth.BasicAuth(dash_app, config.plots_config.get_authentication_dict())
-    server = dash_app.server
-
-    dash_app.run(debug=True)

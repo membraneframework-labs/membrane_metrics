@@ -1,16 +1,12 @@
+import dash
 import pandas as pd
 from dash import MATCH, Input, Output, callback, dcc, html
 from plotly.graph_objects import Figure
-import dash
-import sys
-import os
-current = os.path.dirname(os.path.realpath(__file__))
-parent = os.path.dirname(current)
-sys.path.append(parent)
+
 from config.app_config import AppConfig
 from data_logging.mongodb.collection import MongoCollection
 from data_logging.mongodb.mongo import MongoDB
-from plots import update_graph
+from pages.common import update_graph
 
 ALL_METRIC_TYPES = ["Discord", "Google Analytics", "Hex"]
 
@@ -40,7 +36,6 @@ def update_div(metric_type: str) -> list[dcc]:
     for i, collection in enumerate(collections):
         div_children.append(_get_graph_div_for_collection(collection, i))
     return div_children
-
 
 
 @callback(
@@ -76,7 +71,7 @@ def update_dropdown(metric_type: str) -> tuple[list[str], str, bool, bool, dict]
     Input({"type": "metric-collection-name", "index": MATCH}, "children"),
 )
 def update_graph_wrapper(metric_subcategories: list[str], metric_type: str) -> Figure:
-    return update_graph(metric_subcategories, metric_type)
+    return update_graph(metric_subcategories, metric_type, mongo)
 
 
 def _get_collections_for_metric_type(metric_type: str) -> MongoCollection:

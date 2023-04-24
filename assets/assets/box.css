@@ -8,7 +8,7 @@ body, html {
     box-sizing: border-box;
     float: left;
     width: 50%;
-    height: 20%;
+    height: 50%;
 }
 
 .box:first-child {

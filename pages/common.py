@@ -86,7 +86,9 @@ def update_graph(
     ).update_layout(xaxis_range=[daterange_end, daterange_start])
 
 
-def prepare_static_layout(plots_to_display, mongo, class_name="box"):
+def prepare_static_layout(
+    plots_to_display: dict[str, list[str]], mongo: MongoDB, class_name: str
+) -> html.Div:
     children = []
     for collection_name in plots_to_display.keys():
         collection = MongoCollection(collection_name)

@@ -16,4 +16,4 @@ mongo = MongoDB(config)
 
 dash.register_page(__name__, path="/google/")
 
-layout = prepare_static_layout(PLOTS_TO_DISPLAY, mongo)
+layout = prepare_static_layout(PLOTS_TO_DISPLAY, mongo, "box")

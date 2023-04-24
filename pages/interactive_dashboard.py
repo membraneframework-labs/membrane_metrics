@@ -12,7 +12,7 @@ ALL_METRIC_TYPES = ["Discord", "Google Analytics", "Hex"]
 
 config = AppConfig()
 mongo = MongoDB(config)
-dash.register_page(__name__, path="/interactive/")
+dash.register_page(__name__, path="/")
 layout = html.Div(
     [
         html.H1(children="Membrane Community Metrics", style={"textAlign": "center"}),

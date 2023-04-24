@@ -37,7 +37,6 @@ def _densify(
             idx = pd.date_range(
                 date.today() - timedelta(days=how_many_days_back), date.today()
             )
-            print(df[df.index.duplicated()])
             df = df.reindex(idx)
             df[df[collection.get_value_field_name()].isnull()] = 0
             df["date"] = df.index

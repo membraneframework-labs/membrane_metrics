@@ -92,7 +92,7 @@ def _get_collections_for_metric_type(metric_type: str) -> MongoCollection:
             ]
 
 
-def _get_default_subcategory(collection) -> list[str]:
+def _get_default_subcategory(collection: MongoCollection) -> list[str]:
     match collection:
         case MongoCollection.DiscordMessagesPerDayPerChannel:
             return ["Total", "🙋help", "📋general"]

@@ -2,6 +2,7 @@ from datetime import date, timedelta
 
 import pandas as pd
 import plotly.express as px
+from dash import dcc, html
 from plotly.graph_objects import Figure
 
 from data_logging.mongodb.collection import MongoCollection
@@ -83,3 +84,29 @@ def update_graph(
         y=collection.get_value_field_name(),
         color=collection.get_meta_field_name(),
     ).update_layout(xaxis_range=[daterange_end, daterange_start])
+
+
+def prepare_static_layout(
+    plots_to_display: dict[str, list[str]], mongo: MongoDB, class_name: str
+) -> html.Div:
+    children = []
+    for collection_name in plots_to_display.keys():
+        collection = MongoCollection(collection_name)
+        (graph_div,) = (
+            html.Div(
+                className=class_name,
+                children=[
+                    html.H2(
+                        children=collection.get_friendly_name(),
+                        style={"text-align": "center"},
+                    ),
+                    dcc.Graph(
+                        figure=update_graph(
+                            plots_to_display[collection_name], collection_name, mongo
+                        )
+                    ),
+                ],
+            ),
+        )
+        children.append(graph_div)
+    return html.Div(children)

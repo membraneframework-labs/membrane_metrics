@@ -8,7 +8,7 @@ PLOTS_TO_DISPLAY = {
     "GoogleTimeSpentPerDay": ["Value"],
     "GoogleUsersInTutorialPerDay": ["Total"],
     "GoogleBounceRatePerDay": ["Value"],
-    "GoogleUsersFromTrafficSourcePerDay": ["Total"],
+    "GoogleUsersFromTrafficSourcePerDay": ["Total", "(direct)", "google", "t.co", "github.com"],
 }
 
 config = AppConfig()

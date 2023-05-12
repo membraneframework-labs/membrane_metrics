@@ -34,8 +34,9 @@ def _densify(
         case default:
             df.set_index("date", drop=True, inplace=True)
             df.index = pd.to_datetime(df.index)
+            yesterday = date.today() - timedelta(days=1)
             idx = pd.date_range(
-                date.today() - timedelta(days=how_many_days_back), date.today()
+                yesterday - timedelta(days=how_many_days_back), yesterday
             )
             df = df.reindex(idx)
             df[df[collection.get_value_field_name()].isnull()] = 0

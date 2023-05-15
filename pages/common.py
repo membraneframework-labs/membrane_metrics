@@ -34,8 +34,9 @@ def _densify(
         case default:
             df.set_index("date", drop=True, inplace=True)
             df.index = pd.to_datetime(df.index)
+            yesterday = date.today() - timedelta(days=1)
             idx = pd.date_range(
-                date.today() - timedelta(days=how_many_days_back), date.today()
+                yesterday - timedelta(days=how_many_days_back), yesterday
             )
             df = df.reindex(idx)
             df[df[collection.get_value_field_name()].isnull()] = 0
@@ -73,8 +74,9 @@ def update_graph(
         dfs_to_display.append(df_for_subcategory)
     final_df = pd.concat(dfs_to_display)
 
-    daterange_start = date.today().strftime(DATE_FORMAT)
-    daterange_end = (date.today() - timedelta(days=DEFAULT_DATE_RANGE)).strftime(
+    yesterday =  date.today() - timedelta(days=1)
+    daterange_start = yesterday.strftime(DATE_FORMAT)
+    daterange_end = (yesterday - timedelta(days=DEFAULT_DATE_RANGE)).strftime(
         DATE_FORMAT
     )
 

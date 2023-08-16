@@ -10,4 +10,4 @@ This repo contains the backend system for retrieving and logging into MongoDB so
 ![Add IP address to AtlasDB](assets/mongo_add_ip_address.png)
 4. Add a cron job to run `python3 main.py` daily.
 5. Deploy with gunicorn and Nginx - [example](https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-22-04)
-6. Generate certs with `certbot` (see above example)
+6. Generate certs with `certbot` (see example above)
